@@ -47,6 +47,12 @@
                 border: 0;
                 background: 0;
             }
+            body, html {
+                background: #fff;
+                color: #000;
+                font-family: Tahoma,Verdana,sans-serif;
+            }
+            h1 { text-transform: uppercase; }
         </style>
     </head>
     <body>
@@ -71,9 +77,20 @@
 
         <div class="slide">
             <h1>Heroku</h1>
-            <p class="incremental">Heroku is a Platform As A Service (PAAS)</p>
-            <p class="incremental">Supports many languages</p>
-            <p> facebook </p>
+            <p class="">Heroku is a Platform As A Service (PAAS)</p>
+            <p class="">Supports the following languages:
+                <ul>
+                    <li>Ruby</li>
+                    <li>Java</li>
+                    <li>Python</li>
+                    <li>Clojure</li>
+                    <li>Scala</li>
+                    <li>Node.js</li>
+                </ul>
+            </p>
+            <p>...but supports many others through what it calls &quot;Buildpacks&quot;</p>
+            <p><a href="https://devcenter.heroku.com/articles/third-party-buildpacks">https://devcenter.heroku.com/articles/third-party-buildpacks</a></p>
+            <p> facebook announced its partnership with Heroku on Thursday, 15 September 2011 and developers have been able to create PHP facebook apps through facebook's developer centre ever since.</p>
         </div>
 
 
@@ -81,6 +98,7 @@
             <h1>the Heroku way</h1>
             <p><a href="http://12factor.net">The Twelve-Factor App</a></p>
             <p>&quot;a methodology for building software-as-a-service apps&quot;</p>
+            <p>Poka-yoke (ポカヨケ) - fail-safing/mistake-proofing</p>
         </div>
 
         <div class="slide">
@@ -108,6 +126,10 @@
         </div>          
 
         <div class="slide">
+            <h1>Processes</h1>
+        </div>          
+
+        <div class="slide">
             <h1>Logs</h1>
         </div>          
 
@@ -116,7 +138,9 @@
         </div>          
 
         <div class="slide">
-            <h1>THE END</h1>
+            <div class="vcenter">
+                <h1>THE END</h1>
+            </div>
         </div>          
 
         <div class="slide">
