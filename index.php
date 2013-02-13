@@ -9,26 +9,19 @@
         <meta name="email" content="n@enru.co.uk" />
         <meta name="date" content="2013-02-13" />
         <meta name="venue" content="The Internets" />
-        <!-- Slippy core file and dependencies -->
         <script type="text/javascript" src="/slippy/src/jquery.min.js"></script>
         <script type="text/javascript" src="/slippy/src/jquery.history.js"></script>
         <script type="text/javascript" src="/slippy/src/slippy.js"></script>
-        <!-- Slippy structural styles -->
         <link type="text/css" rel="stylesheet" href="/slippy/src/slippy.css"/>
-        <!-- Slippy theme -->
         <link type="text/css" rel="stylesheet" href="/slippy/src/slippy-pure.css"/>
-        <!-- Syntax highlighting core file  -->
         <script type="text/javascript" src="/highlighter/scripts/shCore.js"></script>
-        <!-- Syntax highlighting brushes, remove those you don't need -->
         <script type="text/javascript" src="/highlighter/scripts/shBrushBash.js"></script>
         <script type="text/javascript" src="/highlighter/scripts/shBrushPhp.js"></script>
         <script type="text/javascript" src="/highlighter/scripts/shBrushPlain.js"></script>
         <script type="text/javascript" src="/highlighter/scripts/shBrushSql.js"></script>
         <script type="text/javascript" src="/highlighter/scripts/shBrushXml.js"></script>
-        <!-- Syntax highlighting styles-->
         <link type="text/css" rel="stylesheet" href="/highlighter/styles/shCore.css"/>
         <link type="text/css" rel="stylesheet" href="/highlighter/styles/shThemeDefault.css"/>
-        <!-- Slippy init code -->
         <script type="text/javascript">
             $(function() {
                 $(".slide").slippy({
@@ -73,14 +66,58 @@
         </div>
 
         <div class="slide">
-            <h1>Welcome to Slippy</h1>
-            <h2>Usage</h2>
-            <ul>
-                <li>Navigation: [Left]/[Right] arrows to move, [Space] or [Double Click] to go to next slide</li>
-                <li>Overview: [ESC]/[Del]/[Tab] to view, [Click] to pick one slide</li>
-                <li>Jump: Press [0-9] keys followed by [Enter] to go straight to one slide</li>
-            </ul>
+            <h1>PHP on Heroku</h1>
         </div>
+
+        <div class="slide">
+            <h1>Heroku</h1>
+            <p class="incremental">Heroku is a Platform As A Service (PAAS)</p>
+            <p class="incremental">Supports many languages</p>
+            <p> facebook </p>
+        </div>
+
+
+        <div class="slide">
+            <h1>the Heroku way</h1>
+            <p><a href="http://12factor.net">The Twelve-Factor App</a></p>
+            <p>&quot;a methodology for building software-as-a-service apps&quot;</p>
+        </div>
+
+        <div class="slide">
+            <h1>Setting up a Heroku Environment</h1>
+        </div>
+
+        <div class="slide">
+            <h1>Deploying to Heroku</h1>
+        </div>
+
+        <div class="slide">
+            <h1>Heroku Config</h1>
+        </div>
+
+        <div class="slide">
+            <h1>Local Config &amp; Enviroment</h1>
+        </div>          
+
+        <div class="slide">
+            <h1>Postgres DB Addon</h1>
+        </div>          
+
+        <div class="slide">
+            <h1>contecting to Postgres with PDO</h1>
+        </div>          
+
+        <div class="slide">
+            <h1>Logs</h1>
+        </div>          
+
+        <div class="slide">
+            <h1>Buildpacks</h1>
+        </div>          
+
+        <div class="slide">
+            <h1>THE END</h1>
+        </div>          
 
         <div class="slide">
             <h1>Syntax Highlighting</h1>
