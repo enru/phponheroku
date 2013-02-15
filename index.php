@@ -56,7 +56,15 @@
             }
             h1 { text-transform: uppercase; }
             code { font-weight: bold; }
-            p { margin: 10px 0; }
+            p { margin: 10px 0; line-height: 1.5; }
+            .super {
+                position: relative;
+                bottom: 0.5em;
+                font-size: 0.8em;
+                margin-left: 0.5em;
+                padding: 0.5em;
+                border: 1px solid #000;
+            }
         </style>
     </head>
     <body>
@@ -101,10 +109,10 @@
 
         <div class="slide">
             <h1>the Heroku way</h1>
-            <p><a href="http://12factor.net">The Twelve-Factor App</a></p>
-            <p>&quot;a methodology for building software-as-a-service apps&quot;</p>
-            <p>Poka-yoke (ポカヨケ) - fail-safing/mistake-proofing</p>
-            <p>web &amp; workers processes</p>
+            <p class="incremental"><a href="http://12factor.net">The Twelve-Factor App</a><span class="super">12</span></p>
+            <p class="incremental">&quot;a methodology for building software-as-a-service apps&quot;</p>
+            <p class="incremental">Poka-yoke (ポカヨケ) - fail-safing/mistake-proofing</p>
+            <p class="incremental">web &amp; workers processes</p>
         </div>
 
         <div class="slide">
