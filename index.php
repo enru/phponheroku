@@ -261,11 +261,13 @@
                 MY_ENV_VAR=abc123
             </pre>
 
+<!--
         </div>          
 
         <div class="slide">
 
             <h1>Accessing ENV vars</h1>
+-->
 
             <p>Environment variables are now accessible to PHP through the <code>getenv()</code> method.</p>
 
@@ -275,45 +277,34 @@
             </pre>
 
             <p>This is more reliable than using the super global var <code>$_ENV</code>.</p>
+            <p>The $_ENV array is created only if the value of the variables_order configuration directive contains E.</p>
+            <?php echo ini_get('variables_order'); ?>
 
         </div>
 
         <div class="slide">
             <h1>Postgres DB Addon</h1>
-            <pre class="brush: bash">
-$ heroku addons:add heroku-postgresql:dev
-Adding heroku-postgresql:dev to sushi... done, v69 (free)
-  Attached as HEROKU_POSTGRESQL_RED
-Database has been created and is available
-</pre>
 
+            <p>heroku provides Postgres as a database solution</p>
 
             <pre class="brush: bash">
-$ heroku pg:info
-=== HEROKU_POSTGRESQL_RED
-Plan         Ika
-Status       available
-Data Size    82.8 GB
-Tables       13
-PG Version   9.1.3
-Created      2012-02-15 09:58 PDT
-=== HEROKU_POSTGRESQL_GRAY
-Plan         Ronin
-Status       following
-Data Size    82.8 GB
-</pre>
+                $ heroku addons:add heroku-postgresql:dev
+                Adding heroku-postgresql:dev to pacific... done, v69 (free)
+                  Attached as HEROKU_POSTGRESQL_TEAL
+                Database has been created and is available
+            </pre>
 
+            <p>You can find info about your DB with <code>heroku pg:info</code>.</p> 
+
+            <p><code>heroku pg:psql</code> will give you access to your production DB.</p>
+
+            <p>To achieve dev/production parity, you can pull your production DB into your dev DB with <code>heroku db:pull [DATABASE_URL]</code>
+            or dump your DB like so:</p>
 
             <pre class="brush: bash">
-$ heroku pg:psql
-Connecting to HEROKU_POSTGRESQL_RED... done
-psql (9.1.3, server 9.1.3)
-SSL connection (cipher: DHE-RSA-AES256-SHA, bits: 256)
-Type "help" for help.
-
-rd2lk8ev3jt5j50=> SELECT * FROM users;
-</pre>
-
+                $ heroku pgbackups:capture
+                $ curl -o latest.dump `heroku pgbackups:url`
+            </pre>
 
 
         </div>          
