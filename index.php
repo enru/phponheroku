@@ -230,15 +230,15 @@
                 $ heroku config:add MY_ENV_VAR=abc123
                 Setting config vars and restarting pacific-cove-5430... done, v11
                 MY_ENV_VAR: abc123
-                $
-                $ heroku config
-                === pacific-cove-5430 Config Vars
-                MY_ENV_VAR:                 abc123
             </pre>
 
             <p>Storing the application's configuration in the environment makes it very easy to move between development, testing and production platforms.</p>
 
             <p>It also reduces the risk of exposing confidential settings.</p>
+
+            <p>MY_ENV_VAR:<?php echo $_ENV['MY_ENV_VAR']; ?></p>
+            <p>MY_ENV_VAR:<?php echo getenv('MY_ENV_VAR'); ?></p>
+
 
         </div>
 
