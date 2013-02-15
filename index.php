@@ -20,8 +20,10 @@
         <script type="text/javascript" src="/highlighter/scripts/shBrushPlain.js"></script>
         <script type="text/javascript" src="/highlighter/scripts/shBrushSql.js"></script>
         <script type="text/javascript" src="/highlighter/scripts/shBrushXml.js"></script>
+<!--
         <link type="text/css" rel="stylesheet" href="/highlighter/styles/shCore.css"/>
         <link type="text/css" rel="stylesheet" href="/highlighter/styles/shCoreDefault.css"/>
+-->
         <link type="text/css" rel="stylesheet" href="/highlighter/styles/shCoreRDark.css"/>
         <link type="text/css" rel="stylesheet" href="/highlighter/styles/shThemeRDark.css"/>
         <script type="text/javascript">
@@ -39,6 +41,7 @@
                     //    images are scaled properly (default is 620px wide)
                     //  - ratio, defines the width/height ratio of the slides, defaults to 1.3 (620x476)
                     //  - margin, the fraction of screen to use as slide margin, defaults to 0.15
+                    ratio: 1.69
                 });
                 SyntaxHighlighter.all();
             });
@@ -49,14 +52,14 @@
                 border: 0;
                 background: 0;
             }
-            body, html {
+            html, body {
                 background: #fff;
                 color: #000;
                 font-family: Tahoma,Verdana,sans-serif;
             }
             h1 { text-transform: uppercase; }
             code { font-weight: bold; }
-            p { margin: 10px 0; line-height: 1.5; }
+            p { margin: 10px 0; line-height: 1.5; font-size: 18px;}
             .super {
                 position: relative;
                 bottom: 0.5em;
@@ -65,6 +68,7 @@
                 padding: 0.5em;
                 border: 1px solid #000;
             }
+            .syntaxhighlighter {  padding: 1em 0 !important; }
         </style>
     </head>
     <body>
@@ -175,11 +179,11 @@
 
             <h1>How does heroku know this is php?</h1>
 
-            <p>heroku's buildpack for PHP looks for an <code>index.php</code> file in the root of the application.</p>
-
-            <p>If found, heroku will start up the default process for the PHP buildpack, which is: <code>web: sh boot.sh</code>
-
-            <p>The contents of <code>boot.sh</code> are:</p>
+            <p>
+                heroku's buildpack for PHP looks for an <code>index.php</code> file in the root of the application.
+                If found, heroku will start up the default process for the PHP buildpack, which is: <code>`web: sh boot.sh`</code>
+                The default contents of <code>boot.sh</code> are:
+            </p>
 
             <pre class="brush: bash">
                 for var in `env|cut -f1 -d=`; do
@@ -236,9 +240,21 @@
 
             <p>It also reduces the risk of exposing confidential settings.</p>
 
-            <p>MY_ENV_VAR:<?php echo $_ENV['MY_ENV_VAR']; ?></p>
-            <p>MY_ENV_VAR:<?php echo getenv('MY_ENV_VAR'); ?></p>
+        </div>
 
+        <div class="slide">
+
+            <h1>Maintenance &amp; 404</h1>
+
+            <p>You can set a default 404 page by adding a <code>ERROR_PAGE_URL</code> variable to your heroku config.</p>
+
+            <p>Putting your app/site into maintenance mode is a simple as:</p>
+
+            <pre class="brush: bash">
+                $ heroku maintenance:on
+            </pre>
+
+            <p>Visitors are redirected to the default maintenance page or the URL contained in the <code>MAINTENANCE_PAGE_URL</code> env var.</li>
 
         </div>
 
@@ -260,25 +276,6 @@
                 STATUS=development
                 MY_ENV_VAR=abc123
             </pre>
-
-<!--
-        </div>          
-
-        <div class="slide">
-
-            <h1>Accessing ENV vars</h1>
--->
-
-            <p>Environment variables are now accessible to PHP through the <code>getenv()</code> method.</p>
-
-            <pre class="brush: php">
-                &lt;?php
-                $status = getenv('STATUS');
-            </pre>
-
-            <p>This is more reliable than using the super global var <code>$_ENV</code>.</p>
-            <p>The $_ENV array is created only if the value of the variables_order configuration directive contains E.</p>
-            <?php echo ini_get('variables_order'); ?>
 
         </div>
 
@@ -310,18 +307,25 @@
         </div>          
 
         <div class="slide">
-            <h1>connecting to Postgres with PDO</h1>
+
+            <h1>connecting to Postgres with a DSN</h1>
+
+            <p>heroku provide a command to get your DB's Data Source Name</p>
+
             <pre class="brush: bash">
 $ heroku pg:credentials DATABASE
 Connection info string:
    "dbname=vnb324vndgh23h host=ec2-123-45-678-910.compute-1.amazonaws.com port=6212 user=user1234 password=abcd123 sslmode=require"
             </pre>
 
+            <p>This info is already in your environment.</p>
+
+            <p><a href="https://github.com/enru/dsnfromenv">https://github.com/enru/dsnfromenv</a></p>
+
             <pre class="brush: php">
-require 'vendor/autoload.php';
+require 'enru/dsnfromenv.php';
 try {
     $dsn = new enru\DsnFromEnv();
-    error_log(var_export($dsn->parse(), true));
     $dbh = new PDO($dsn->parse());
 } 
 catch (PDOException $e) {
@@ -329,15 +333,34 @@ catch (PDOException $e) {
     die();
 }
 </pre>
+        
 
         </div>          
 
         <div class="slide">
             <h1>Logs</h1>
+
+            <p>heroku provides access to your application logs with <code>heroku logs</code>.</p>
+
+            <p><code>stdout</code> and <code>stderr</code> go to logs.</p>
+
+            <p>Several filters to this command are available <code>heroku logs --source app</code> or <code>heroku logs --ps web</code>.</p>
+
+            <p>Logs can be tailed with <code>heroku logs --tail</code>.</p>
+
+            <p>Logs can be sent to syslogd on another machine.</p>
+
+            <pre class="brush: bash">
+                $ heroku drains:add syslog://host1.example.com:514
+                Drain syslog://host1.example.com:514 added to myapp
+            </pre>
+
         </div>          
 
         <div class="slide">
             <h1>Processes & Scaling</h1>
+
+            <p></p
         </div>          
 
         <div class="slide">
