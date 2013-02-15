@@ -139,8 +139,28 @@
 
         <div class="slide">
             <h1>Deploying to Heroku</h1>
-            <p>Deploying to heroku is done using git.</p>
-            <p>A simple push is all that is required.</p>
+            <p>Deploying to heroku is done using git. A simple push is all that is required.</p>
+            <pre class="brush: bash">
+                $ git push origin master
+                Enter passphrase for key '/home/enru/.ssh/id_rsa': 
+                Counting objects: 5, done.
+                Delta compression using up to 2 threads.
+                Compressing objects: 100% (3/3), done.
+                Writing objects: 100% (3/3), 4.39 KiB, done.
+                Total 3 (delta 1), reused 0 (delta 0)
+                -----> PHP app detected
+                -----> Bundling Apache version 2.2.22
+                -----> Bundling PHP version 5.3.10
+                -----> Discovering process types
+                       Procfile declares types -> (none)
+                       Default types for PHP   -> web
+                -----> Compiled slug size: 9.6MB
+                -----> Launching... done, v12
+                       http://pacific-cove-5430.herokuapp.com deployed to Heroku
+
+                To git@heroku.com:pacific-cove-5430.git
+                   ba90ccb..4323b3d  master -> master
+            </pre>
         </div>
 
         <div class="slide">
