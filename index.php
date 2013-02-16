@@ -20,27 +20,11 @@
         <script type="text/javascript" src="/highlighter/scripts/shBrushPlain.js"></script>
         <script type="text/javascript" src="/highlighter/scripts/shBrushSql.js"></script>
         <script type="text/javascript" src="/highlighter/scripts/shBrushXml.js"></script>
-<!--
-        <link type="text/css" rel="stylesheet" href="/highlighter/styles/shCore.css"/>
-        <link type="text/css" rel="stylesheet" href="/highlighter/styles/shCoreDefault.css"/>
--->
         <link type="text/css" rel="stylesheet" href="/highlighter/styles/shCoreRDark.css"/>
         <link type="text/css" rel="stylesheet" href="/highlighter/styles/shThemeRDark.css"/>
         <script type="text/javascript">
             $(function() {
                 $(".slide").slippy({
-                    // settings go here
-                    // possible values are:
-                    //  - animLen, duration for default animations (0 = disabled)
-                    //  - animInForward, receives a slide and animates it
-                    //  - animInRewind, receives a slide and animates it
-                    //  - animOutForward, receives a slide and animates it
-                    //  - animOutRewind, receives a slide and animates it
-                    //  - baseWidth, defines the base for img resizing, if you don't want only
-                    //    full-width images, specify this as the pixel width of a slide so that
-                    //    images are scaled properly (default is 620px wide)
-                    //  - ratio, defines the width/height ratio of the slides, defaults to 1.3 (620x476)
-                    //  - margin, the fraction of screen to use as slide margin, defaults to 0.15
                     ratio: 1.69
                 });
                 SyntaxHighlighter.all();
@@ -58,7 +42,11 @@
                 font-family: Tahoma,Verdana,sans-serif;
             }
             h1 { text-transform: uppercase; }
-            code { font-weight: bold; }
+            code { 
+                font-weight: bold; 
+                background-color: lightgrey;
+                padding: 4px;
+            }
             p { margin: 10px 0; line-height: 1.5; font-size: 18px;}
             .super {
                 position: relative;
@@ -69,6 +57,7 @@
                 border: 1px solid #000;
             }
             .syntaxhighlighter {  padding: 1em 0 !important; }
+            ol.twelve-factor { margin-left: 50px; }
         </style>
     </head>
     <body>
@@ -88,7 +77,9 @@
         </div>
 
         <div class="slide">
-            <h1>PHP on Heroku</h1>
+            <div class="vcenter">
+                <h1>PHP on Heroku</h1>
+            </div>
         </div>
 
         <div class="slide">
@@ -115,9 +106,46 @@
             <h1>the Heroku way</h1>
             <p class="incremental"><a href="http://12factor.net">The Twelve-Factor App</a><span class="super">12</span></p>
             <p class="incremental">&quot;a methodology for building software-as-a-service apps&quot;</p>
+            <div class="incremental">
+                <ol class="twelve-factor">
+                <li>Codebase - One codebase tracked in revision control, many deploys</li>
+                <li>Dependencies - Explicitly declare and isolate dependencies</li>
+                <li>Config - Store config in the environment</li>
+                <li>Backing Services - Treat backing services as attached resources</li>
+                <li>Build, release, run - Strictly separate build and run stages</li>
+                <li>Processes - Execute the app as one or more stateless processes</li>
+                <li>Port binding - Export services via port binding</li>
+                <li>Concurrency - Scale out via the process model</li>
+                <li>Disposability - Maximize robustness with fast startup and graceful shutdown</li>
+                <li>Dev/prod parity - Keep development, staging, and production as similar as possible</li>
+                <li>Logs - Treat logs as event streams</li>
+                <li>Admin processes - Run admin/management tasks as one-off processes </li>
+                </ol>
+            </div>
             <p class="incremental">Poka-yoke (ポカヨケ) - fail-safing/mistake-proofing</p>
             <p class="incremental">web &amp; workers processes</p>
         </div>
+
+        <div class="slide">
+            <h1>Processes & Scaling</h1>
+
+            <p>heroku allows you to runs as many processes as you like</p>
+
+            <p>View your running process with <code>heroku ps</code>
+
+            <p>By default, heroku provides one <code>web</code> process and tries to automatically identify your application type.</p>
+
+            <p>If you need more control over what processes are run you need to commit a <code>Procfile</code> that lists your processes.</p>
+
+            <pre class="brush: bash">
+                $ cat Procfile 
+                web: sh boot.sh 
+                worker: php queue_runner.php
+            </pre>
+
+            <p>Processes are scaled up ad down with <code>heroku ps:scale web=2</code>
+
+        </div>          
 
         <div class="slide">
 
@@ -147,6 +175,28 @@
                 Git remote heroku added
             </pre>
             
+        </div>
+
+        <div class="slide">
+
+            <h1>Local Development</h1>
+
+            <p>Local dev can be done using PHP's dev server.</p>
+
+            <p>Foreman (part of the heroku toolbelt) can also be used for local development</p>
+           
+            <p>A local Procfile can be used to get Foreman to run the PHP dev server</p>
+
+            <pre class="brush: bash">
+                $ cat Procfile.dev 
+                web: php -S localhost:5000 -t . 
+                $ foreman start -f Procfile.dev 
+                21:32:27 web.1  | started with pid 25937
+            </pre>
+
+            <p>Our web app will now be available at <a href="http://localhost:5000">http://localhost:5000/</a></p>
+
+
         </div>
 
         <div class="slide">
@@ -204,25 +254,29 @@
         </div>
 
         <div class="slide">
+            <h1>Buildpacks</h1>
+<ul>
+<li><code>bin/detect</code>: Determines whether to apply this buildpack to an app.</li>
 
-            <h1>Local Development</h1>
+<li><code>bin/compile</code>: Used to perform the transformation steps on the app.</li>
 
-            <p>Local dev can be done using PHP's dev server</p>
+<li><code>bin/release</code>: Provides metadata back to the runtime.</li>
+</ul>
 
-            <p>Foreman (part of the heroku toolbelt) can also be used for local development</p>
-           
-            <p>A local Procfile can be used to get Foreman to run the PHP dev server</p>
+        <p>This is how a tailor-made platform can be created.</p>
 
-            <pre class="brush: bash">
-                $ cat Procfile.dev 
-                web: php -S localhost:5000 -t . 
-                $ foreman start -f Procfile.dev 
-                21:32:27 web.1  | started with pid 25937
-            </pre>
+        <p>Choice of web-server, compiled PHP modules</p>  
 
-            <p>Our web app will now be available at <a href="http://localhost:5000">http://localhost:5000/</a></p>
+        <p>Specify your buildpack when you create your app.</p>
+        
+<ul>
+<li><a href="https://github.com/heroku/heroku-buildpack-php">php buildpack</a></li>
+<li><a href="https://github.com/klaussilveira/heroku-buildpack-silex">silex buildpack</a></li>
+<li><a href="https://github.com/ryanbrainard/heroku-buildpack-phing">phing buildpack</a></li>
+</ul>
 
-        </div>
+        
+        </div>          
 
         <div class="slide">
 
@@ -244,22 +298,6 @@
 
         <div class="slide">
 
-            <h1>Maintenance &amp; 404</h1>
-
-            <p>You can set a default 404 page by adding a <code>ERROR_PAGE_URL</code> variable to your heroku config.</p>
-
-            <p>Putting your app/site into maintenance mode is a simple as:</p>
-
-            <pre class="brush: bash">
-                $ heroku maintenance:on
-            </pre>
-
-            <p>Visitors are redirected to the default maintenance page or the URL contained in the <code>MAINTENANCE_PAGE_URL</code> env var.</li>
-
-        </div>
-
-        <div class="slide">
-
             <h1>Local Environment Variables</h1>
 
             <p>Foreman also loads up any variables declared in a .env file into its environment</p> 
@@ -276,6 +314,22 @@
                 STATUS=development
                 MY_ENV_VAR=abc123
             </pre>
+
+        </div>
+
+        <div class="slide">
+
+            <h1>Maintenance &amp; 404</h1>
+
+            <p>You can set a default 404 page by adding a <code>ERROR_PAGE_URL</code> variable to your heroku config.</p>
+
+            <p>Putting your app/site into maintenance mode is a simple as:</p>
+
+            <pre class="brush: bash">
+                $ heroku maintenance:on
+            </pre>
+
+            <p>Visitors are redirected to the default maintenance page or the URL contained in the <code>MAINTENANCE_PAGE_URL</code> env var.</li>
 
         </div>
 
@@ -358,52 +412,23 @@ catch (PDOException $e) {
         </div>          
 
         <div class="slide">
-            <h1>Processes & Scaling</h1>
-
-            <p></p
-        </div>          
-
-        <div class="slide">
-            <h1>Buildpacks</h1>
-<ul>
-<li>
-<code>bin/detect</code>: Determines whether to apply this buildpack to an app.</li>
-
-<li>
-<code>bin/compile</code>: Used to perform the transformation steps on the app.</li>
-
-<li>
-<code>bin/release</code>: Provides metadata back to the runtime.</li>
-</ul>
-
-https://devcenter.heroku.com/articles/buildpacks
-
-https://devcenter.heroku.com/articles/buildpack-api
-
-https://github.com/heroku/heroku-buildpack-php
-
-https://github.com/andrewsg/heroku-buildpack-php-foundry
-
-https://github.com/klaussilveira/heroku-buildpack-silex
-https://github.com/ryanbrainard/heroku-buildpack-phing
-        </div>          
-
-        <div class="slide">
             <h1>closing</h1>
         </div>
 
         <div class="slide">
             <h1>other PAAS</h1>
-    PagodaBox
-    AppFog
-    fortrabbit
-    Engine Yard Orchestra PHP Platform
-    Red Hat OpenShift Platform
-    dotCloud
-    AWS Elastic Beanstalk
-    cloudControl
-    Windows Azure
-    Zend Developer Cloud
+       <ul>
+    <li>PagodaBox</li>
+    <li>AppFog</li>
+    <li>fortrabbit</li>
+    <li>Engine Yard Orchestra PHP Platform</li>
+    <li>Red Hat OpenShift Platform</li>
+    <li>dotCloud</li>
+    <li>AWS Elastic Beanstalk</li>
+    <li>cloudControl</li>
+    <li>Windows Azure</li>
+    <li>Zend Developer Cloud</li>
+        </ul>
             </div>
         </div>          
 
