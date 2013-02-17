@@ -34,6 +34,11 @@
         </script>
         <!-- Custom style for this deck -->
         <style type="text/css">
+@media only screen 
+and (min-width : 320px) 
+and (max-width : 480px) {
+    .default .footer { display: none; }
+}
             @font-face {
                 font-family: 'PatuaOneRegular';
                 src: url('font/PatuaOne-Regular-webfont.eot');
@@ -44,10 +49,6 @@
                 font-weight: normal;
                 font-style: normal;
             }
-            .slide.nofooter {
-                border: 0;
-                background: 0;
-            }
             html, body {
                 background: #0a0a0a;
                 color: #fafafa;
@@ -55,7 +56,8 @@
                 font-size: 1.5em;
             }
             a, a:link { color: orange !important; text-decoration: none; }
-            h1 { text-transform: uppercase; color: #60ee60; font-size: 2em; }
+            h1,h2 { text-transform: uppercase; color: #60ee60; }
+            h1 { font-size: 2em; }
             code { 
                 font-weight: bold; 
                 background-color: lightgrey;
@@ -72,7 +74,7 @@
     </head>
     <body>
 
-        <div class="layout" data-name="default">
+        <div class="layout default" data-name="default">
             <content></content>
             <div class="footer">
                 <span class="left">Neill Russell</span>
@@ -82,11 +84,17 @@
             </div>
         </div>
 
-        <div class="layout nofooter" data-name="alt">
+        <div class="layout withfooter" data-name="alt">
             <content></content>
+            <div class="footer">
+                <span class="left">Neill Russell</span>
+                <span class="left"><a href="http://www.enru.co.uk">www.enru.co.uk</a></span>
+                <span class="right">Twitter <a href="http://twitter.com/enru">@enru</a></span>
+                <hr class="defloat" />
+            </div>
         </div>
 
-        <div class="slide">
+        <div class="slide" data-layout="alt">
             <div class="vcenter">
                 <h1 class="title">PHP on Heroku</h1>
             </div>
@@ -108,7 +116,7 @@
             <p>Many others supported through &quot;Buildpacks&quot; </br>
             <a href="https://devcenter.heroku.com/articles/third-party-buildpacks">https://devcenter.heroku.com/articles/third-party-buildpacks</a></p>
 
-            <p>facebook announced its partnership with Heroku on Thursday, 15 September 2011.<br/> 
+            <p>facebook &amp; heroku - September 2011.<br/> 
             <a href="http://developers.facebook.com/blog/post/558/">http://developers.facebook.com/blog/post/558/</a></p>
         </div>
 
@@ -143,18 +151,18 @@
         <div class="slide">
             <h1>the 12 factors</h1>
                 <ol class="twelve-factor">
-                <li>Codebase - One codebase tracked in revision control, many deploys</li>
-                <li>Dependencies - Explicitly declare and isolate dependencies</li>
-                <li>Config - Store config in the environment</li>
-                <li>Backing Services - Treat backing services as attached resources</li>
-                <li>Build, release, run - Strictly separate build and run stages</li>
-                <li>Processes - Execute the app as one or more stateless processes</li>
-                <li>Port binding - Export services via port binding</li>
-                <li>Concurrency - Scale out via the process model</li>
-                <li>Disposability - Maximize robustness with fast startup and graceful shutdown</li>
-                <li>Dev/prod parity - Keep development, staging, and production as similar as possible</li>
-                <li>Logs - Treat logs as event streams</li>
-                <li>Admin processes - Run admin/management tasks as one-off processes </li>
+                <li>Codebase</li>
+                <li>Dependencies</li>
+                <li>Config</li>
+                <li>Backing Services</li>
+                <li>Build, release, run</li>
+                <li>Processes</li>
+                <li>Port binding</li>
+                <li>Concurrency</li>
+                <li>Disposability</li>
+                <li>Dev/prod parity</li>
+                <li>Logs</li>
+                <li>Admin processes</li>
                 </ol>
         </div>
 
@@ -192,9 +200,9 @@
         <div class="slide">
             <h1>Processes & Scaling</h1>
 
-            <p>heroku allows you to runs as many processes as you like</p>
+            <p>heroku allows you to run as many processes as you like.</p>
 
-            <p>View your running process with <code>heroku ps</code>
+            <p>View your running process with <code>heroku ps</code></p>
 
             <p>By default, heroku provides one <code>web</code> process and tries to automatically identify your application type.</p>
 
@@ -293,9 +301,7 @@
 
         <div class="slide">
 
-            <h1>Maintenance &amp; 404</h1>
-
-            <p>You can set a default 404 page by adding a <code>ERROR_PAGE_URL</code> variable to your heroku config.</p>
+            <h1>Maintenance</h1>
 
             <p>Putting your app/site into maintenance mode is a simple as:</p>
 
@@ -304,6 +310,10 @@
             </pre>
 
             <p>Visitors are redirected to the default maintenance page or the URL contained in the <code>MAINTENANCE_PAGE_URL</code> env var.</li>
+
+            <h1>404</h1>
+
+            <p>You can set a default 404 page by adding a <code>ERROR_PAGE_URL</code> variable to your heroku config.</p>
 
         </div>
 
@@ -319,18 +329,41 @@
                 Database has been created and is available
             </pre>
 
-            <p>You can find info about your DB with <code>heroku pg:info</code>.</p> 
+            <p>You can find info about your DB with <code>heroku pg:info</code></p> 
 
             <p><code>heroku pg:psql</code> will give you access to your production DB.</p>
 
-            <p>To achieve dev/production parity, you can pull your production DB into your dev DB with <code>heroku db:pull [DATABASE_URL]</code>
-            or dump your DB like so:</p>
+
+            <pre class="brush: bash">
+$ heroku pg:psql
+psql (9.1.7, server 9.1.6)
+SSL connection (cipher: DHE-RSA-AES256-SHA, bits: 256)
+Type "help" for help.
+
+afhgf5r5y431vf=>
+            </pre>
+        </div>
+
+
+        <div class="slide">
+            <h1>DB pull/backup</h1>
+
+            <p>Pull/push your production DB into/from your dev DB with:</p>
+
+            <pre class="brush: bash">
+                $ heroku db:pull $DATABASE_URL
+                $ heroku db:push $DATABASE_URL
+            </pre>
+        
+            <p>...or dump/restore your DB using the <code>heroku pgbackups</code> addon:</p>
 
             <pre class="brush: bash">
                 $ heroku pgbackups:capture
                 $ curl -o latest.dump `heroku pgbackups:url`
+                $ heroku pgbackups:restore DATABASE 'https://s3.amazonaws.com/me/items/3H0q/latest.dump'
             </pre>
 
+           <p>dev/prod parity</p> 
 
         </div>          
 
@@ -396,7 +429,7 @@ catch (PDOException $e) {
 
             <p>heroku's buildpack for PHP looks for an <code>index.php</code> file.</p>
 
-            <p>If no Procfile the default process for the PHP buildpack is run, which is: <code>`web: sh boot.sh`</code></p>
+            <p>If no Procfile the default process for the PHP buildpack is run, which is: <br/><code>`web: sh boot.sh`</code></p>
 
             <pre class="brush: bash">
                 $ cat boot.sh
@@ -431,7 +464,7 @@ catch (PDOException $e) {
         <div class="slide">
             <h1>using Buildpacks</h1>
 
-            <p>Buildpacks are how a tailor-made platform can be created - choice of web-server, compiled PHP modules</p>  
+            <p>How a tailor-made platform is created - choice of web-server, compiled PHP modules</p>  
 
             <pre class="brush: bash">
                 $ heroku create myapp --buildpack https://github.com/some/buildpack.git
@@ -465,7 +498,7 @@ catch (PDOException $e) {
         </div>
       
 
-        <div class="slide">
+        <div class="slide" data-layout="alt">
             <div class="vcenter">
                 <h1>THE END</h1>
             </div>
