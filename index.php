@@ -48,16 +48,9 @@
                 padding: 4px;
             }
             p { margin: 10px 0; line-height: 1.5; font-size: 18px;}
-            .super {
-                position: relative;
-                bottom: 0.5em;
-                font-size: 0.8em;
-                margin-left: 0.5em;
-                padding: 0.5em;
-                border: 1px solid #000;
-            }
             .syntaxhighlighter {  padding: 1em 0 !important; }
             ol.twelve-factor { margin-left: 50px; }
+            ul.buildpacks li { line-height: 2.5; }
         </style>
     </head>
     <body>
@@ -95,16 +88,38 @@
                     <li>Node.js</li>
                 </ul>
 
-            <p>...but supports many others through what it calls &quot;Buildpacks&quot;
-            <a href="https://devcenter.heroku.com/articles/third-party-buildpacks">https://devcenter.heroku.com/articles/third-party-buildpacks</a></p>
+            <p>Many others supported through &quot;Buildpacks&quot;</p>
+            <p><a href="https://devcenter.heroku.com/articles/third-party-buildpacks">https://devcenter.heroku.com/articles/third-party-buildpacks</a></p>
 
-            <p> facebook announced its partnership with Heroku on Thursday, 15 September 2011 and developers have been able to create PHP facebook apps through facebook's developer centre ever since. <a href="http://developers.facebook.com/blog/post/558/">http://developers.facebook.com/blog/post/558/</a></p>
+            <p>facebook announced its partnership with Heroku on Thursday, 15 September 2011.</p> 
+
+		<p><a href="http://developers.facebook.com/blog/post/558/">http://developers.facebook.com/blog/post/558/</a></p>
         </div>
 
+        <div class="slide">
+            <h1>other PAAS</h1>
+            <div class="vcenter">
+                <ul>
+                    <li>PagodaBox</li>
+                    <li>AppFog</li>
+                    <li>fortrabbit</li>
+                    <li>Engine Yard Orchestra PHP Platform</li>
+                    <li>Red Hat OpenShift Platform</li>
+                    <li>dotCloud</li>
+                    <li>AWS Elastic Beanstalk</li>
+                    <li>cloudControl</li>
+                    <li>Windows Azure</li>
+                    <li>Zend Developer Cloud</li>
+                </ul>
+            </div>
+        </div>    
 
         <div class="slide">
             <h1>the Heroku way</h1>
-            <p class="incremental"><a href="http://12factor.net">The Twelve-Factor App</a><span class="super">12</span></p>
+            <p class="incremental">processes (the UNIX model)</p>
+            <p class="incremental">Poka-yoke (ポカヨケ) - fail-safing/mistake-proofing </p>
+            <p class="incremental">&quot;to eliminate product defects by preventing, correcting, or drawing attention to human errors as they occur&quot;</p>
+            <p class="incremental"><a href="http://12factor.net">The Twelve-Factor App</a></p>
             <p class="incremental">&quot;a methodology for building software-as-a-service apps&quot;</p>
             <div class="incremental">
                 <ol class="twelve-factor">
@@ -122,30 +137,9 @@
                 <li>Admin processes - Run admin/management tasks as one-off processes </li>
                 </ol>
             </div>
-            <p class="incremental">Poka-yoke (ポカヨケ) - fail-safing/mistake-proofing</p>
-            <p class="incremental">web &amp; workers processes</p>
+
         </div>
 
-        <div class="slide">
-            <h1>Processes & Scaling</h1>
-
-            <p>heroku allows you to runs as many processes as you like</p>
-
-            <p>View your running process with <code>heroku ps</code>
-
-            <p>By default, heroku provides one <code>web</code> process and tries to automatically identify your application type.</p>
-
-            <p>If you need more control over what processes are run you need to commit a <code>Procfile</code> that lists your processes.</p>
-
-            <pre class="brush: bash">
-                $ cat Procfile 
-                web: sh boot.sh 
-                worker: php queue_runner.php
-            </pre>
-
-            <p>Processes are scaled up ad down with <code>heroku ps:scale web=2</code>
-
-        </div>          
 
         <div class="slide">
 
@@ -178,104 +172,25 @@
         </div>
 
         <div class="slide">
+            <h1>Processes & Scaling</h1>
 
-            <h1>Local Development</h1>
+            <p>heroku allows you to runs as many processes as you like</p>
 
-            <p>Local dev can be done using PHP's dev server.</p>
+            <p>View your running process with <code>heroku ps</code>
 
-            <p>Foreman (part of the heroku toolbelt) can also be used for local development</p>
-           
-            <p>A local Procfile can be used to get Foreman to run the PHP dev server</p>
+            <p>By default, heroku provides one <code>web</code> process and tries to automatically identify your application type.</p>
+
+            <p>Commit a <code>Procfile</code> if you need more control over your processes.</p>
 
             <pre class="brush: bash">
-                $ cat Procfile.dev 
-                web: php -S localhost:5000 -t . 
-                $ foreman start -f Procfile.dev 
-                21:32:27 web.1  | started with pid 25937
+                $ cat Procfile 
+                web: sh boot.sh 
+                worker: php queue_runner.php
+                clock: php update_feed.php
             </pre>
 
-            <p>Our web app will now be available at <a href="http://localhost:5000">http://localhost:5000/</a></p>
+            <p>Processes are scaled up ad down with <code>heroku ps:scale web=2</code>
 
-
-        </div>
-
-        <div class="slide">
-            <h1>Deploying to Heroku</h1>
-            <p>Deploying to heroku is done using git. A simple push is all that is required.</p>
-            <pre class="brush: bash">
-                $ git push origin master
-                Enter passphrase for key '/home/enru/.ssh/id_rsa': 
-                Counting objects: 5, done.
-                Delta compression using up to 2 threads.
-                Compressing objects: 100% (3/3), done.
-                Writing objects: 100% (3/3), 4.39 KiB, done.
-                Total 3 (delta 1), reused 0 (delta 0)
-                -----> PHP app detected
-                -----> Bundling Apache version 2.2.22
-                -----> Bundling PHP version 5.3.10
-                -----> Discovering process types
-                       Procfile declares types -> (none)
-                       Default types for PHP   -> web
-                -----> Compiled slug size: 9.6MB
-                -----> Launching... done, v12
-                       http://pacific-cove-5430.herokuapp.com deployed to Heroku
-
-                To git@heroku.com:pacific-cove-5430.git
-                   ba90ccb..4323b3d  master -> master
-            </pre>
-        </div>
-
-        <div class="slide">
-
-            <h1>How does heroku know this is php?</h1>
-
-            <p>
-                heroku's buildpack for PHP looks for an <code>index.php</code> file in the root of the application.
-                If found, heroku will start up the default process for the PHP buildpack, which is: <code>`web: sh boot.sh`</code>
-                The default contents of <code>boot.sh</code> are:
-            </p>
-
-            <pre class="brush: bash">
-                for var in `env|cut -f1 -d=`; do
-                echo "PassEnv $var" >> /app/apache/conf/httpd.conf;
-                done
-                touch /app/apache/logs/error_log
-                touch /app/apache/logs/access_log
-                tail -F /app/apache/logs/error_log &
-                tail -F /app/apache/logs/access_log &
-                export LD_LIBRARY_PATH=/app/php/ext
-                export PHP_INI_SCAN_DIR=/app/www
-                echo "Launching apache"
-                exec /app/apache/bin/httpd -DNO_DETACH
-            </pre> 
-
-            <p>The default processes for a buildpack can be overridden by committing &amp; deploying your own <code>Procfile</code></p>
-
-        </div>
-
-        <div class="slide">
-            <h1>Buildpacks</h1>
-<ul>
-<li><code>bin/detect</code>: Determines whether to apply this buildpack to an app.</li>
-
-<li><code>bin/compile</code>: Used to perform the transformation steps on the app.</li>
-
-<li><code>bin/release</code>: Provides metadata back to the runtime.</li>
-</ul>
-
-        <p>This is how a tailor-made platform can be created.</p>
-
-        <p>Choice of web-server, compiled PHP modules</p>  
-
-        <p>Specify your buildpack when you create your app.</p>
-        
-<ul>
-<li><a href="https://github.com/heroku/heroku-buildpack-php">php buildpack</a></li>
-<li><a href="https://github.com/klaussilveira/heroku-buildpack-silex">silex buildpack</a></li>
-<li><a href="https://github.com/ryanbrainard/heroku-buildpack-phing">phing buildpack</a></li>
-</ul>
-
-        
         </div>          
 
         <div class="slide">
@@ -293,6 +208,27 @@
             <p>Storing the application's configuration in the environment makes it very easy to move between development, testing and production platforms.</p>
 
             <p>It also reduces the risk of exposing confidential settings.</p>
+
+        </div>
+
+        <div class="slide">
+
+            <h1>Local Development</h1>
+
+            <p>Local dev can be done using PHP's dev server.</p>
+
+            <p>Foreman (part of the heroku toolbelt) can also be used for local development</p>
+           
+            <p>A local Procfile can be used to get Foreman to run the PHP dev server</p>
+
+            <pre class="brush: bash">
+                $ cat Procfile.dev 
+                web: php -S localhost:5000 -t . 
+                $ foreman start -f Procfile.dev 
+                21:32:27 web.1  | started with pid 25937
+            </pre>
+
+            <p>Our web app will now be available at <a href="http://localhost:5000">http://localhost:5000/</a></p>
 
         </div>
 
@@ -316,6 +252,26 @@
             </pre>
 
         </div>
+
+        <div class="slide">
+            <h1>Logs</h1>
+
+            <p>heroku provides access to your application logs with <code>heroku logs</code>.</p>
+
+            <p><code>stdout</code> and <code>stderr</code> go to logs.</p>
+
+            <p>Several filters to this command are available <code>heroku logs --source app</code> or <code>heroku logs --ps web</code>.</p>
+
+            <p>Logs can be tailed with <code>heroku logs --tail</code>.</p>
+
+            <p>Logs can be sent to syslogd on another machine.</p>
+
+            <pre class="brush: bash">
+                $ heroku drains:add syslog://host1.example.com:514
+                Drain syslog://host1.example.com:514 added to myapp
+            </pre>
+
+        </div>          
 
         <div class="slide">
 
@@ -392,45 +348,96 @@ catch (PDOException $e) {
         </div>          
 
         <div class="slide">
-            <h1>Logs</h1>
+            <h1>Deploying to Heroku</h1>
+            <p>Deploying to heroku is done using git. A simple push is all that is required.</p>
+            <pre class="brush: bash">
+                $ git push origin master
+                Counting objects: 5, done.
+                Delta compression using up to 2 threads.
+                Compressing objects: 100% (3/3), done.
+                Writing objects: 100% (3/3), 4.39 KiB, done.
+                Total 3 (delta 1), reused 0 (delta 0)
+                -----> PHP app detected
+                -----> Bundling Apache version 2.2.22
+                -----> Bundling PHP version 5.3.10
+                -----> Discovering process types
+                       Procfile declares types -> (none)
+                       Default types for PHP   -> web
+                -----> Compiled slug size: 9.6MB
+                -----> Launching... done, v12
+                       http://pacific-cove-5430.herokuapp.com deployed to Heroku
 
-            <p>heroku provides access to your application logs with <code>heroku logs</code>.</p>
+                To git@heroku.com:pacific-cove-5430.git
+                   ba90ccb..4323b3d  master -> master
+            </pre>
+        </div>
 
-            <p><code>stdout</code> and <code>stderr</code> go to logs.</p>
+        <div class="slide">
 
-            <p>Several filters to this command are available <code>heroku logs --source app</code> or <code>heroku logs --ps web</code>.</p>
+            <h1>How does heroku know this is php?</h1>
 
-            <p>Logs can be tailed with <code>heroku logs --tail</code>.</p>
+            <p>heroku's buildpack for PHP looks for an <code>index.php</code> file.</p>
 
-            <p>Logs can be sent to syslogd on another machine.</p>
+            <p>If no Procfile the default process for the PHP buildpack is run, which is: <code>`web: sh boot.sh`</code></p>
 
             <pre class="brush: bash">
-                $ heroku drains:add syslog://host1.example.com:514
-                Drain syslog://host1.example.com:514 added to myapp
+                $ cat boot.sh
+                for var in `env|cut -f1 -d=`; do
+                echo "PassEnv $var" >> /app/apache/conf/httpd.conf;
+                done
+                touch /app/apache/logs/error_log
+                touch /app/apache/logs/access_log
+                tail -F /app/apache/logs/error_log &
+                tail -F /app/apache/logs/access_log &
+                export LD_LIBRARY_PATH=/app/php/ext
+                export PHP_INI_SCAN_DIR=/app/www
+                echo "Launching apache"
+                exec /app/apache/bin/httpd -DNO_DETACH
+            </pre> 
+
+        </div>
+
+        <div class="slide">
+            <h1>Buildpacks</h1>
+
+            <ul class='buildpacks'>
+                <li><code>bin/detect</code>: Determines whether to apply this buildpack to an app.</li>
+                <li><code>bin/compile</code>: Used to perform the transformation steps on the app.</li>
+                <li><code>bin/release</code>: Provides metadata back to the runtime.</li>
+            </ul>
+
+            <p>This is how a tailor-made platform can be created - choice of web-server, compiled PHP modules</p>  
+
+
+            <pre class="brush: bash">
+                $ heroku create myapp --buildpack https://github.com/some/buildpack.git
             </pre>
 
+            <p>Set the <code>BUILDPACK_URL</code> to change the buildpack in use.</p> 
+
+            <pre class="brush: bash">
+                $ heroku config:add BUILDPACK_URL=https://github.com/some/buildpack.git -a myapp
+            </pre>
+
+            <ul>
+                <li><a href="https://github.com/heroku/heroku-buildpack-php">php buildpack</a></li>
+                <li><a href="https://github.com/klaussilveira/heroku-buildpack-silex">silex buildpack</a></li>
+                <li><a href="https://devcenter.heroku.com/articles/third-party-buildpacks">3rd party buildpacks</a></li>
+            </ul>
+            
         </div>          
 
         <div class="slide">
             <h1>closing</h1>
-        </div>
-
-        <div class="slide">
-            <h1>other PAAS</h1>
-       <ul>
-    <li>PagodaBox</li>
-    <li>AppFog</li>
-    <li>fortrabbit</li>
-    <li>Engine Yard Orchestra PHP Platform</li>
-    <li>Red Hat OpenShift Platform</li>
-    <li>dotCloud</li>
-    <li>AWS Elastic Beanstalk</li>
-    <li>cloudControl</li>
-    <li>Windows Azure</li>
-    <li>Zend Developer Cloud</li>
-        </ul>
+            <div class="vcenter">
+                <p class="incremental">using a PAAS allows you to focus on development</p>
+                <p class="incremental">many free/low-cost plans = cheap to execute ideas</p>
+                <p class="incremental">ability to scale is there if/when needed</p>
+                <p class="incremental">good engineering principles encouraged</p> 
+                <p class="incremental">easy to move app/sites built in this way</p>
             </div>
-        </div>          
+        </div>
+      
 
         <div class="slide">
             <div class="vcenter">
@@ -440,3 +447,6 @@ catch (PDOException $e) {
 
     </body>
 </html>
+
+
+	
