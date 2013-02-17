@@ -22,6 +22,7 @@
         <script type="text/javascript" src="/highlighter/scripts/shBrushXml.js"></script>
         <link type="text/css" rel="stylesheet" href="/highlighter/styles/shCoreRDark.css"/>
         <link type="text/css" rel="stylesheet" href="/highlighter/styles/shThemeRDark.css"/>
+
         <script type="text/javascript">
             $(function() {
                 $(".slide").slippy({
@@ -32,25 +33,40 @@
         </script>
         <!-- Custom style for this deck -->
         <style type="text/css">
+            @font-face {
+                font-family: 'PatuaOneRegular';
+                src: url('font/PatuaOne-Regular-webfont.eot');
+                src: url('font/PatuaOne-Regular-webfont.eot?#iefix') format('embedded-opentype'),
+                     url('font/PatuaOne-Regular-webfont.woff') format('woff'),
+                     url('font/PatuaOne-Regular-webfont.ttf') format('truetype'),
+                     url('font/PatuaOne-Regular-webfont.svg#PatuaOneRegular') format('svg');
+                font-weight: normal;
+                font-style: normal;
+            }
             .slide.nofooter {
                 border: 0;
                 background: 0;
             }
             html, body {
-                background: #fff;
-                color: #000;
-                font-family: Tahoma,Verdana,sans-serif;
+                background: #0a0a0a;
+                color: #fafafa;
+                font-family: PatuaOneRegular, Tahoma,Verdana,sans-serif;
+                font-size: 1.5em;
             }
-            h1 { text-transform: uppercase; }
+            a, a:link { color: orange !important; text-decoration: none; }
+            h1 { text-transform: uppercase; color: #60ee60; font-size: 2em; }
             code { 
                 font-weight: bold; 
                 background-color: lightgrey;
+                color: #0a0a0a;
                 padding: 4px;
             }
-            p { margin: 10px 0; line-height: 1.5; font-size: 18px;}
-            .syntaxhighlighter {  padding: 1em 0 !important; }
+            p { margin: 10px 0; line-height: 1.5; font-size: 1.5em;}
+            li { font-size: 1.5em; margin-bottom: 5px; }
+            .syntaxhighlighter {  padding: 0.5em 0 !important; }
             ol.twelve-factor { margin-left: 50px; }
             ul.buildpacks li { line-height: 2.5; }
+            h1.title { font-size: 4em; }
         </style>
     </head>
     <body>
@@ -71,7 +87,7 @@
 
         <div class="slide">
             <div class="vcenter">
-                <h1>PHP on Heroku</h1>
+                <h1 class="title">PHP on Heroku</h1>
             </div>
         </div>
 
@@ -88,12 +104,11 @@
                     <li>Node.js</li>
                 </ul>
 
-            <p>Many others supported through &quot;Buildpacks&quot;</p>
-            <p><a href="https://devcenter.heroku.com/articles/third-party-buildpacks">https://devcenter.heroku.com/articles/third-party-buildpacks</a></p>
+            <p>Many others supported through &quot;Buildpacks&quot; </br>
+            <a href="https://devcenter.heroku.com/articles/third-party-buildpacks">https://devcenter.heroku.com/articles/third-party-buildpacks</a></p>
 
-            <p>facebook announced its partnership with Heroku on Thursday, 15 September 2011.</p> 
-
-		<p><a href="http://developers.facebook.com/blog/post/558/">http://developers.facebook.com/blog/post/558/</a></p>
+            <p>facebook announced its partnership with Heroku on Thursday, 15 September 2011.<br/> 
+            <a href="http://developers.facebook.com/blog/post/558/">http://developers.facebook.com/blog/post/558/</a></p>
         </div>
 
         <div class="slide">
@@ -121,7 +136,11 @@
             <p class="incremental">&quot;to eliminate product defects by preventing, correcting, or drawing attention to human errors as they occur&quot;</p>
             <p class="incremental"><a href="http://12factor.net">The Twelve-Factor App</a></p>
             <p class="incremental">&quot;a methodology for building software-as-a-service apps&quot;</p>
-            <div class="incremental">
+        </div>
+
+        
+        <div class="slide">
+            <h1>the 12 factors</h1>
                 <ol class="twelve-factor">
                 <li>Codebase - One codebase tracked in revision control, many deploys</li>
                 <li>Dependencies - Explicitly declare and isolate dependencies</li>
@@ -136,8 +155,6 @@
                 <li>Logs - Treat logs as event streams</li>
                 <li>Admin processes - Run admin/management tasks as one-off processes </li>
                 </ol>
-            </div>
-
         </div>
 
 
@@ -145,7 +162,7 @@
 
             <h1>Setting up heroku</h1>
 
-            <p><a href="https://api.heroku.com/signup/devcenter">Get an account</a> and grab the <code>heroku toolbelt</code> from <a href="https://toolbelt.heroku.com/">https://toolbelt.heroku.com/</a></p>
+            <p><a href="https://api.heroku.com/signup/devcenter">Get an account</a> &amp; grab the heroku toolbelt from <a href="https://toolbelt.heroku.com/">https://toolbelt.heroku.com/</a></p>
 
             <pre class="brush: bash">
                 $ heroku login
@@ -400,14 +417,20 @@ catch (PDOException $e) {
         <div class="slide">
             <h1>Buildpacks</h1>
 
+            <div class="vcenter">
             <ul class='buildpacks'>
-                <li><code>bin/detect</code>: Determines whether to apply this buildpack to an app.</li>
-                <li><code>bin/compile</code>: Used to perform the transformation steps on the app.</li>
-                <li><code>bin/release</code>: Provides metadata back to the runtime.</li>
+                <li><code>bin/detect</code> determines whether to apply this buildpack to an app.</li>
+                <li><code>bin/compile</code> used to perform the transformation steps on the app.</li>
+                <li><code>bin/release</code> provides metadata back to the runtime.</li>
             </ul>
+            </div>
 
-            <p>This is how a tailor-made platform can be created - choice of web-server, compiled PHP modules</p>  
+        </div>
 
+        <div class="slide">
+            <h1>using Buildpacks</h1>
+
+            <p>Buildpacks are how a tailor-made platform can be created - choice of web-server, compiled PHP modules</p>  
 
             <pre class="brush: bash">
                 $ heroku create myapp --buildpack https://github.com/some/buildpack.git
@@ -418,6 +441,8 @@ catch (PDOException $e) {
             <pre class="brush: bash">
                 $ heroku config:add BUILDPACK_URL=https://github.com/some/buildpack.git -a myapp
             </pre>
+
+            <p>Example buildpacks:</p>
 
             <ul>
                 <li><a href="https://github.com/heroku/heroku-buildpack-php">php buildpack</a></li>
